@@ -2,6 +2,8 @@
 
 Tienda online de ropa. Realice sus pagos desde cualquier parte del mundo.
 
+visite: [CRWN store](https://mycrown-clothing-store.netlify.app/)
+
 ## Available Scripts
 
 In the project directory, you can run:
