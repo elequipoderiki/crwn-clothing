@@ -11,13 +11,14 @@ import {getFirestore, setDoc} from 'firebase/firestore';
 import {doc, getDoc} from 'firebase/firestore';
 
 const config = {
-    apiKey: "AIzaSyCkSiT_0I8fWgoOkZjV5DEhtKiZHgEuF8c",
-    authDomain: "crwn-db-97da4.firebaseapp.com",
-    projectId: "crwn-db-97da4",
-    storageBucket: "crwn-db-97da4.appspot.com",
-    messagingSenderId: "269569018848",
-    appId: "1:269569018848:web:51960783cbd06508e7f985"
+    apiKey: process.env.REACT_APP_FIREBASE_CONFIG_apiKey,
+    authDomain: process.env.REACT_APP_FIREBASE_CONFIG_authDomain,
+    projectId: process.env.REACT_APP_FIREBASE_CONFIG_projectId,
+    storageBucket: process.env.REACT_APP_FIREBASE_CONFIG_storageBucket,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_CONFIG_messagingSenderId,
+    appId: process.env.REACT_APP_FIREBASE_CONFIG_appId
   };
+
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) {
