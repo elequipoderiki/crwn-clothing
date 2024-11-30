@@ -4,7 +4,58 @@ import CollectionsOverview from "../../components/collections-overview/collectio
 import { Route, Routes, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import CollectionPage from "../collection/collection.component";
+import { connect } from "react-redux";
+import { getDocs, collection, onSnapshot } from "firebase/firestore";
+import { convertCollectionsSnapshotToMap, db } from "../../firebase/firebase.utils";
+import { updateCollections } from "../../redux/shop/shop.actions";
+import WithSpinner from "../../components/with-spinner/with-spinner.component";
 
+
+const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
+const CollectionPageWithSpinner = WithSpinner(CollectionPage);
+
+class ShopPage extends React.Component {
+    
+    constructor() {
+        super();
+        this.state = {
+            loading: true
+        }
+    }
+    unsubscribeFromSnapshot = null;
+
+    componentDidMount() {
+        const {updateCollections} = this.props;
+        const collectionRef = collection(db, 'collections')
+
+        this.unsubscribeFromSnapshot = onSnapshot(collectionRef, async snapshot => {
+            const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+            updateCollections(collectionsMap);
+            this.setState({loading: false})
+        })
+    }
+    
+    render () {
+        const {match} = this.props;
+        const {loading} = this.state;
+        const params = useParams;
+        console.log('--------- props: ', this.props)
+        return (
+            <div className="shop-page">
+                <Routes>
+                    {/* <Route path={``} element={<CollectionsOverview/>} /> */}
+                    <Route path={``} element={<CollectionsOverviewWithSpinner   
+                     isLoading={loading} {...this.props}/>} />
+                    <Route path={`/:collectionId`}  
+                    element={<CollectionPageWithSpinner isLoading={loading} getProps={params}/> } />
+                </Routes>
+            </div>
+        )    
+    }
+}
+
+
+/*
 const ShopPage = () => {
     //we pass useParams function to child component in order to use it on its  mapStateToProps function, because useParams cannot be invoked directly on these child function, it is a hook, but it can if it is passed as a prop
     const params = useParams
@@ -18,6 +69,13 @@ const ShopPage = () => {
         </div>
     )
 }
+*/
+const mapDispatchToProps = dispatch => ({
+    updateCollections: collectionsMap => 
+        dispatch(updateCollections(collectionsMap))
+})
 
-
-export default ShopPage;
+export default connect(
+    null,
+    mapDispatchToProps
+) (ShopPage);
