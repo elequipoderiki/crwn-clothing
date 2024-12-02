@@ -14,7 +14,7 @@ function MenuItem({title, imageUrl, size, linkUrl}) {
     let navigate = useNavigate();
     let location = useLocation();
     let params = useParams();
-    // console.log(location.pathname())
+    // console.log("++++++++++++++++++++",location.pathname)
 
     return (
         <div className={ `${size} menu-item`} 

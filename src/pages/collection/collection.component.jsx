@@ -9,7 +9,12 @@ import './collection.styles.scss'
 
 const CollectionPage = ({collection}) => {
     // console.log('***** collection ********: ',collection)
-    const {title, items } = collection
+    let params = useParams();
+    // console.log("++++++++++++++++++++",params.collectionId)
+
+    let miCollection = collection(params.collectionId)
+
+    const {title, items } = miCollection
     return (
     <div className="collection-page">
         <h2 className="title">{title}</h2>
@@ -24,7 +29,8 @@ const CollectionPage = ({collection}) => {
  
 const mapStateToProps = (state, ownProps) => ({
     //ownProps are the props coming from parent component and includes a function called getProps. These are not default props
-    collection: selectCollection(ownProps.getProps().collectionId)(state)
+    // collection: selectCollection(ownProps.getProps().collectionId)(state)
+    collection: selectCollection()(state)
 })
 
 export default connect(mapStateToProps)(CollectionPage)
